@@ -9,6 +9,14 @@ class Main extends React.Component {
       editID: null,
       editValue: "",
     };
+    this.onChange = this.onChange.bind(this);
+    this.onAddTask = this.onAddTask.bind(this);
+    this.onDeleteTask = this.onDeleteTask.bind(this);
+    this.onEditChange = this.onEditChange.bind(this);
+    this.onEditTask = this.onEditTask.bind(this);
+    this.onConfirm = this.onConfirm.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.renderEdit = this.renderEdit.bind(this);
   }
 
   onChange = (tempValue) => {
@@ -57,6 +65,27 @@ class Main extends React.Component {
       editValue: "",
     });
   };
+
+  // onConfirmTwo = (id) => {
+  //   let index;
+  //   const updatedTask = this.state.tasks.find((t, i) => {
+  //     if (t.id === id) {
+  //       index = i;
+  //       return t;
+  //     }
+  //   });
+  //   if (!updatedTask) return;
+
+  //   updatedTask.taskName = this.state.editValue;
+  //   const tasks = [...this.state.tasks];
+  //   tasks[index] = updatedTask;
+
+  //   this.setState({
+  //     tasks: tasks,
+  //     editValue: "",
+  //     editID: null,
+  //   });
+  // };
 
   onCancel = () => {
     this.setState({
