@@ -66,27 +66,6 @@ class Main extends React.Component {
     });
   };
 
-  // onConfirmTwo = (id) => {
-  //   let index;
-  //   const updatedTask = this.state.tasks.find((t, i) => {
-  //     if (t.id === id) {
-  //       index = i;
-  //       return t;
-  //     }
-  //   });
-  //   if (!updatedTask) return;
-
-  //   updatedTask.taskName = this.state.editValue;
-  //   const tasks = [...this.state.tasks];
-  //   tasks[index] = updatedTask;
-
-  //   this.setState({
-  //     tasks: tasks,
-  //     editValue: "",
-  //     editID: null,
-  //   });
-  // };
-
   onCancel = () => {
     this.setState({
       editID: null,
