@@ -9,6 +9,14 @@ class Main extends React.Component {
       editID: null,
       editValue: "",
     };
+    this.onChange = this.onChange.bind(this);
+    this.onAddTask = this.onAddTask.bind(this);
+    this.onDeleteTask = this.onDeleteTask.bind(this);
+    this.onEditChange = this.onEditChange.bind(this);
+    this.onEditTask = this.onEditTask.bind(this);
+    this.onConfirm = this.onConfirm.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.renderEdit = this.renderEdit.bind(this);
   }
 
   onChange = (tempValue) => {
