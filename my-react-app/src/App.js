@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-class Main extends React.Component {
+
+class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -9,6 +10,7 @@ class Main extends React.Component {
       editID: null,
       editValue: "",
     };
+
     this.onChange = this.onChange.bind(this);
     this.onAddTask = this.onAddTask.bind(this);
     this.onDeleteTask = this.onDeleteTask.bind(this);
@@ -19,51 +21,49 @@ class Main extends React.Component {
     this.renderEdit = this.renderEdit.bind(this);
   }
 
-  onChange = (tempValue) => {
-    tempValue = tempValue.target.value;
-    this.setState({ value: tempValue });
+  onChange = (event) => {
+    this.setState({ value: event.target.value });
   };
 
-  onAddTask = (tempValue) => {
-    tempValue.preventDefault();
+  onAddTask = (event) => {
+    event.preventDefault();
     const taskobj = {
       taskname: this.state.value,
       id: Date.now(),
     };
-    if (this.state.value !== "") {
-      this.setState({
-        tasks: this.state.tasks.concat(taskobj),
+    if (this.state.value.trim() !== "") {
+      this.setState((prevState) => ({
+        tasks: [...prevState.tasks, taskobj],
         value: "",
-      });
+      }));
     }
   };
 
   onDeleteTask = (itemId) => {
-    this.setState({
-      tasks: this.state.tasks.filter((newTask) => newTask.id !== itemId),
-    });
+    this.setState((prevState) => ({
+      tasks: prevState.tasks.filter((task) => task.id !== itemId),
+    }));
   };
-  onEditChange = (tempValue) => {
-    this.setState({ editValue: tempValue.target.value });
+
+  onEditChange = (event) => {
+    this.setState({ editValue: event.target.value });
   };
+
   onEditTask = (id, currentName) => {
     this.setState({
       editID: id,
       editValue: currentName,
     });
   };
+
   onConfirm = (id) => {
-    const updatedTask = this.state.tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, taskname: this.state.editValue };
-      }
-      return task;
-    });
-    this.setState({
-      tasks: updatedTask,
+    this.setState((prevState) => ({
+      tasks: prevState.tasks.map((task) =>
+        task.id === id ? { ...task, taskname: prevState.editValue } : task
+      ),
       editID: null,
       editValue: "",
-    });
+    }));
   };
 
   onCancel = () => {
@@ -73,50 +73,51 @@ class Main extends React.Component {
     });
   };
 
-  renderEdit = (task) => {
-    return (
-      <form>
-        <input
-          type="text"
-          value={this.state.editValue}
-          onChange={this.onEditChange}
-        ></input>
-        <button onClick={() => this.onConfirm(task.id)}>Confirm</button>
-        <button onClick={this.onCancel}>Cancel</button>
-      </form>
-    );
-  };
+  renderEdit = (task) => (
+    <form onSubmit={(event) => event.preventDefault()}>
+      <input
+        type="text"
+        value={this.state.editValue}
+        onChange={this.onEditChange}
+      />
+      <button type="button" onClick={() => this.onConfirm(task.id)}>
+        Confirm
+      </button>
+      <button type="button" onClick={this.onCancel}>
+        Cancel
+      </button>
+    </form>
+  );
 
   render() {
-    const tempList = this.state.tasks.map((task) => {
-      let taskContent;
-      if (this.state.editID === task.id) {
-        taskContent = this.renderEdit(task);
-      } else {
-        {
-          taskContent = (
-            <div>
-              {task.taskname}
-              <button onClick={() => this.onDeleteTask(task.id)}>Delete</button>
-              <button onClick={() => this.onEditTask(task.id, task.taskname)}>
-                Edit
-              </button>
-            </div>
-          );
-        }
-      }
-      return <li key={task.id}>{taskContent}</li>;
-    });
+    const tempList = this.state.tasks.map((task) => (
+      <li key={task.id}>
+        {this.state.editID === task.id ? (
+          this.renderEdit(task)
+        ) : (
+          <div>
+            {task.taskname}
+            <button onClick={() => this.onDeleteTask(task.id)}>Delete</button>
+            <button onClick={() => this.onEditTask(task.id, task.taskname)}>
+              Edit
+            </button>
+          </div>
+        )}
+      </li>
+    ));
+
     return (
-      <form className="todo-container">
-        <input
-          placeholder="Type your task"
-          onChange={this.onChange}
-          value={this.state.value}
-        ></input>
-        <button onClick={this.onAddTask}>Add task</button>
+      <div className="todo-container">
+        <form onSubmit={this.onAddTask}>
+          <input
+            placeholder="Type your task"
+            onChange={this.onChange}
+            value={this.state.value}
+          />
+          <button type="submit">Add task</button>
+        </form>
         <ul>{tempList}</ul>
-      </form>
+      </div>
     );
   }
 }
